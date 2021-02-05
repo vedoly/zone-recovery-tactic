@@ -1,2 +1,2 @@
-# Zero-Recovery-System-Design
+# Zone-Recovery-System-Design
 For me to learn about quantitative analysis
