@@ -23,4 +23,4 @@ class Zone:
             if row.Price > 0:
                 pass
 
-        return t, df.iloc[0].Price, ratio
+        return t, df.iloc[0].Price, modulation
