@@ -20,6 +20,7 @@ class Zone:
         open.append(first_price)
 
         for i, row in df[1:].iterrows():
-            if row.Price >
+            if row.Price > 0:
+                pass
 
         return t, df.iloc[0].Price, ratio
