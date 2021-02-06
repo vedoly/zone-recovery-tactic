@@ -2,7 +2,7 @@ import numpy as numpy
 
 
 class Zone:
-    def __init__(self, zone_width, distance):
+    def __init__(self, up, down, above_target, below_target):
         self.up = up
         self.down = down
         self.above_target = above_target
