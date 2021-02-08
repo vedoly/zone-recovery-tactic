@@ -36,7 +36,7 @@ def simulation(df, limit=4, alpha=2, money=1000):
     money -= buy_cost
     print(action, first_price, money, 1, 0)
 
-    zone = Zone(first_price, first_price * 0.01, first_price * 0.04)
+    zone = Zone(first_price, first_price * 0.005, first_price * 0.02)
 
     buy_hold = 1
     sell_hold = 0
@@ -46,7 +46,7 @@ def simulation(df, limit=4, alpha=2, money=1000):
         current_price = row.Price
         action, state = makeDecision(prev_price, current_price, zone, state)
 
-        if alpha > 8:
+        if alpha > 32:
 
             buy_cost = 0
             money += buy_unit * row.Price
@@ -58,6 +58,7 @@ def simulation(df, limit=4, alpha=2, money=1000):
             sell_unit = 0
             buy_hold, sell_hold = 0, 0
             alpha = 1
+            temp_money = 0
             action = 'Cut Loss'
 
         if action == 'Open Buy':
@@ -96,17 +97,18 @@ def simulation(df, limit=4, alpha=2, money=1000):
 
             sell_cost = 0
             debt = sell_unit * row.Price
-            # print(temp_money,debt)
+            print(temp_money, debt)
             money += 2*temp_money - debt
             sell_unit = 0
             sell_hold = 0
+            temp_money = 0
             # state = 'Sell'
             # print('Close Sell', temp_money - debt,money)
             alpha = 1
 
         if sell_unit == 0 and buy_unit == 0:
             zone = Zone(current_price, current_price *
-                        0.01, current_price * 0.04)
+                        0.005, current_price * 0.02)
 
         if(action != 'Steady'):
             print(action, current_price, money, buy_hold, sell_hold)
