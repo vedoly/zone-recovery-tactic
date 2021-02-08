@@ -14,7 +14,7 @@ for c in years:
     for i, e in enumerate(['Year', 'Month', 'Day', 'Hour', 'Minute']):
         df[e] = df['Time'].apply(
             lambda x: datetime.datetime.fromtimestamp(x/1000.0).timetuple()[:5][i])
- 
+
     df = df.drop(columns=['Time'])
     df = df[df['Year'] == int(c)]
     print(len(df))

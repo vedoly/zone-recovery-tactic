@@ -23,28 +23,74 @@ def simulation(df, limit=4, alpha=2, money=1000):
     state = 'w8 4 Sell'
     action = 'Open Buy'
     first_money = money
-
-    buy_cost = 0
+    temp_money = 0
+    buy_cost = 1 * alpha
     sell_cost = 0
 
-    buy_unit = 0
     sell_unit = 0
-
-    # temp_money = 0
 
     first_price = df.iloc[0].Price
     prev_price = first_price
-    print(action, first_price)
+    buy_unit = buy_cost / first_price
+
+    money -= buy_cost
+    print(action, first_price, money)
+
     zone = Zone(first_price, first_price * 0.01, first_price * 0.04)
+
+    buy_hold = 0
+    sell_hold = 0
 
     for i, row in df[1:].iterrows():
 
         current_price = row.Price
         action, state = makeDecision(prev_price, current_price, zone, state)
-        if action == 'Close Buy' or action == 'Close Sell':
+
+        if action == 'Open Buy':
+            buy_cost += 1 * alpha
+            alpha *= 2
+            money -= buy_cost
+            buy_unit += buy_cost / row.Price
+            buy_hold += 1
+            # state = 'Sell'
+            # print('Open Buy', buy_cost, row.Price,money)
+
+        if action == 'Open Sell':
+            sell_cost += 1 * alpha
+            temp_money += sell_cost
+            alpha *= 2
+            money -= sell_cost
+            sell_unit += sell_cost / row.Price
+            sell_hold += 1
+            # state = 'Buy'
+            # print('Open Sell', sell_cost,money)
+
+        if action == 'Close Buy':
+
+            buy_cost = 0
+            money += buy_unit * row.Price
+
+            # state = 'Buy'
+            # print('Close Buy', buy_unit * row.Price,money)
+            buy_unit = 0
+            alpha = 1
+
+        if action == 'Close Sell':
+
+            sell_cost = 0
+            debt = sell_unit * row.Price
+            money += temp_money - debt
+            sell_unit = 0
+            # state = 'Sell'
+            # print('Close Sell', temp_money - debt,money)
+            alpha = 1
+
+        if sell_unit == 0 and buy_unit == 0:
             zone = Zone(current_price, current_price *
                         0.01, current_price * 0.04)
+
         if(action != 'Steady'):
-            print(action, current_price)
+            print(action, current_price, money)
 
         prev_price = current_price
+    print(money-first_money)
