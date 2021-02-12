@@ -1,7 +1,7 @@
 from zone_recovery.zone import Zone
 
 
-def makeDecision0(prev_price, current_price, zone: Zone, state: str):
+def makeDecisionLegacy(prev_price, current_price, zone: Zone, state: str):
 
     if (prev_price > zone.up and current_price < zone.up or current_price == zone.up) and state == 'w8 4 Buy':
         return 'Open Buy', 'w8 4 Sell'
